@@ -1,0 +1,45 @@
+{
+  "name": "rclone-openapi",
+  "version": "1.72.0",
+  "keywords": [
+    "rclone",
+    "openapi",
+    "spec",
+    "types"
+  ],
+  "author": "https://github.com/rclone-ui",
+  "license": "MIT",
+  "description": "OpenAPI specification for the Rclone RC API.",
+  "main": "openapi.json",
+  "types": "types.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types.d.ts",
+      "import": "./openapi.json",
+      "require": "./openapi.json",
+      "default": "./openapi.json"
+    },
+    "./openapi.json": {
+      "import": "./openapi.json",
+      "require": "./openapi.json",
+      "default": "./openapi.json"
+    }
+  },
+  "files": [
+    "openapi.json",
+    "types.d.ts",
+    "openapi.yaml"
+  ],
+  "scripts": {
+    "gen:json": "npx @redocly/cli bundle openapi.yaml -o openapi.json --ext json",
+    "gen:types": "openapi-typescript openapi.yaml -o types.d.ts",
+    "gen": "npm run gen:json && npm run gen:types",
+    "bump": "npm version patch --no-git-tag-version",
+    "pub": "npm run gen && npm run bump && npm publish"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^1.34.5",
+    "openapi-typescript": "^7.10.1",
+    "yaml": "^2.8.1"
+  }
+}
