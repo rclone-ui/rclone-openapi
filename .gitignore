@@ -19,3 +19,5 @@ dist
 .work
 .work/*
 
+.npmrc
+.env*
