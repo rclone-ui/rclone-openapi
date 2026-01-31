@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Rclone RC API",
-    "version": "1.72.0",
+    "version": "1.73.0",
     "description": "Full OpenAPI specification for the Rclone RC API.",
     "contact": {
       "name": "GitHub Repository",
@@ -291,6 +291,48 @@
           }
         },
         "operationId": "operationsHashsum"
+      }
+    },
+    "/operations/hashsumfile": {
+      "post": {
+        "summary": "Hash a single file",
+        "description": "Returns the hash of a single file using the specified hash algorithm.",
+        "tags": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Operations_HashsumfilePostFsParam"
+          },
+          {
+            "$ref": "#/components/parameters/Operations_HashsumfilePostRemoteParam"
+          },
+          {
+            "$ref": "#/components/parameters/Operations_HashsumfilePostHashTypeParam"
+          },
+          {
+            "$ref": "#/components/parameters/Operations_HashsumfilePostDownloadParam"
+          },
+          {
+            "$ref": "#/components/parameters/Operations_HashsumfilePostBase64Param"
+          },
+          {
+            "$ref": "#/components/parameters/GlobalGroupParam"
+          },
+          {
+            "$ref": "#/components/parameters/GlobalAsyncParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OperationsHashsumfileResponse"
+          },
+          "4XX": {
+            "$ref": "#/components/responses/RcError"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/RcError"
+          }
+        },
+        "operationId": "operationsHashsumfile"
       }
     },
     "/operations/movefile": {
@@ -3519,6 +3561,49 @@
           "type": "boolean"
         }
       },
+      "Operations_HashsumfilePostFsParam": {
+        "name": "fs",
+        "in": "query",
+        "description": "Remote name or path containing the file to hash.",
+        "schema": {
+          "type": "string"
+        },
+        "required": true
+      },
+      "Operations_HashsumfilePostRemoteParam": {
+        "name": "remote",
+        "in": "query",
+        "description": "Path to the specific file within `fs` to hash.",
+        "schema": {
+          "type": "string"
+        },
+        "required": true
+      },
+      "Operations_HashsumfilePostHashTypeParam": {
+        "name": "hashType",
+        "in": "query",
+        "description": "Hash algorithm to use, e.g. `md5`, `sha1`, or another supported name.",
+        "schema": {
+          "type": "string"
+        },
+        "required": true
+      },
+      "Operations_HashsumfilePostDownloadParam": {
+        "name": "download",
+        "in": "query",
+        "description": "Set to true to force reading the data instead of using remote checksums.",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "Operations_HashsumfilePostBase64Param": {
+        "name": "base64",
+        "in": "query",
+        "description": "Set to true to emit the hash value in base64 rather than hexadecimal.",
+        "schema": {
+          "type": "boolean"
+        }
+      },
       "Operations_MovefilePostSrcFsParam": {
         "name": "srcFs",
         "in": "query",
@@ -5530,6 +5615,30 @@
               "required": [
                 "hashType",
                 "hashsum"
+              ]
+            }
+          }
+        }
+      },
+      "OperationsHashsumfileResponse": {
+        "description": "Hash algorithm used and the hash value for a single file from `operations/hashsumfile`.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hashType": {
+                  "type": "string",
+                  "description": "The hash algorithm that was used."
+                },
+                "hash": {
+                  "type": "string",
+                  "description": "The hash value of the file."
+                }
+              },
+              "required": [
+                "hashType",
+                "hash"
               ]
             }
           }

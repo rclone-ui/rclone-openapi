@@ -164,6 +164,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/operations/hashsumfile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Hash a single file
+         * @description Returns the hash of a single file using the specified hash algorithm.
+         */
+        post: operations["operationsHashsumfile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/operations/movefile": {
         parameters: {
             query?: never;
@@ -2160,6 +2180,20 @@ export interface components {
                 };
             };
         };
+        /** @description Hash algorithm used and the hash value for a single file from `operations/hashsumfile`. */
+        OperationsHashsumfileResponse: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @description The hash algorithm that was used. */
+                    hashType: string;
+                    /** @description The hash value of the file. */
+                    hash: string;
+                };
+            };
+        };
         /** @description Public sharing URL returned by `operations/publiclink`. */
         OperationsPubliclinkResponse: {
             headers: {
@@ -3171,6 +3205,16 @@ export interface components {
         Operations_HashsumPostDownloadParam: boolean;
         /** @description Set to true to emit hash values in base64 rather than hexadecimal. */
         Operations_HashsumPostBase64Param: boolean;
+        /** @description Remote name or path containing the file to hash. */
+        Operations_HashsumfilePostFsParam: string;
+        /** @description Path to the specific file within `fs` to hash. */
+        Operations_HashsumfilePostRemoteParam: string;
+        /** @description Hash algorithm to use, e.g. `md5`, `sha1`, or another supported name. */
+        Operations_HashsumfilePostHashTypeParam: string;
+        /** @description Set to true to force reading the data instead of using remote checksums. */
+        Operations_HashsumfilePostDownloadParam: boolean;
+        /** @description Set to true to emit the hash value in base64 rather than hexadecimal. */
+        Operations_HashsumfilePostBase64Param: boolean;
         /** @description Source remote name or path containing the file to move. */
         Operations_MovefilePostSrcFsParam: string;
         /** @description Path to the source object within `srcFs`. */
@@ -3768,6 +3812,35 @@ export interface operations {
         requestBody?: never;
         responses: {
             200: components["responses"]["OperationsHashsumResponse"];
+            "4XX": components["responses"]["RcError"];
+            "5XX": components["responses"]["RcError"];
+        };
+    };
+    operationsHashsumfile: {
+        parameters: {
+            query: {
+                /** @description Remote name or path containing the file to hash. */
+                fs: components["parameters"]["Operations_HashsumfilePostFsParam"];
+                /** @description Path to the specific file within `fs` to hash. */
+                remote: components["parameters"]["Operations_HashsumfilePostRemoteParam"];
+                /** @description Hash algorithm to use, e.g. `md5`, `sha1`, or another supported name. */
+                hashType: components["parameters"]["Operations_HashsumfilePostHashTypeParam"];
+                /** @description Set to true to force reading the data instead of using remote checksums. */
+                download?: components["parameters"]["Operations_HashsumfilePostDownloadParam"];
+                /** @description Set to true to emit the hash value in base64 rather than hexadecimal. */
+                base64?: components["parameters"]["Operations_HashsumfilePostBase64Param"];
+                /** @description Assign the request to a custom stats group. */
+                _group?: components["parameters"]["GlobalGroupParam"];
+                /** @description Run the command asynchronously. Returns a job id immediately. */
+                _async?: components["parameters"]["GlobalAsyncParam"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: components["responses"]["OperationsHashsumfileResponse"];
             "4XX": components["responses"]["RcError"];
             "5XX": components["responses"]["RcError"];
         };
